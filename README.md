@@ -1,4 +1,4 @@
-# Vancouver Housing Analysis
+# Vancouver Housing Equity Analysis
 
 This project examines how housing affordability and core housing need vary across visible minority groups in Vancouver, with a specific focus on how Black households compare with other groups across time. The work is built around a Shiny dashboard that makes the story accessible to a broad audience through clear visuals and interactive comparisons.
 
