@@ -10,7 +10,7 @@ The goal is not to reduce a complex issue to a single story, but to show where t
 
 ## Data source
 
-The project draws on Statistics Canada data on household income, shelter costs, tenure, and core housing need for Vancouver by visible minority status. The dataset includes multiple time points from 2001 to 2021 and is processed into a clean long-format table before being visualized.
+The dataset was obtained through the Canada Mortgage and Housing Corporation (CMHC) table, [Household Income and Costs of Visible Minority Groups](https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-data/data-tables/household-characteristics/household-income-shelter-cost-to-income-ratio-visible-minority-groups-core-need-status). The packaged workbook identifies Statistics Canada census data as the underlying source. It includes multiple time points from 2001 to 2021 and is processed into a clean long-format table before being visualized.
 
 The project workflow is organized as follows:
 
