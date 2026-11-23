@@ -21,7 +21,7 @@ standardize_group <- function(x) {
 standardize_core_need <- function(x) {
   x %>%
     str_trim() %>%
-    str_replace("6$", "") %>%
+    str_replace("[67]$", "") %>%
     recode(
       "Total - Households examined for core housing need" = "Total",
       "Household in core housing need" = "In core housing need",
