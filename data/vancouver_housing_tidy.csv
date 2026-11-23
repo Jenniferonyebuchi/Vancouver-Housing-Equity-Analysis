@@ -44,7 +44,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2001,Vancouver,Total,Renter,Visible minority not included elsewhere,505,39400,796,33.7
 2001,Vancouver,Total,Renter,Multiple visible minorities,1085,41000,746,31.4
 2001,Vancouver,Total,Renter,Not a visible minority,201900,46280,827,29.7
-2001,Vancouver,Household in core housing need7,Total,All households,122285,19840,765,49.4
+2001,Vancouver,In core housing need,Total,All households,122285,19840,765,49.4
 2001,Vancouver,In core housing need,Total,Visible minority total,43135,22380,857,49.1
 2001,Vancouver,In core housing need,Total,Chinese,20075,22060,854,49.1
 2001,Vancouver,In core housing need,Total,South Asian,7470,24820,940,48.5
@@ -59,7 +59,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2001,Vancouver,In core housing need,Total,Visible minority not included elsewhere,250,21200,864,51.8
 2001,Vancouver,In core housing need,Total,Multiple visible minorities,570,20700,736,47.5
 2001,Vancouver,In core housing need,Total,Not a visible minority,79150,18440,715,49.5
-2001,Vancouver,Household in core housing need7,Owner,All households,39825,22200,902,49.9
+2001,Vancouver,In core housing need,Owner,All households,39825,22200,902,49.9
 2001,Vancouver,In core housing need,Owner,Visible minority total,18635,24440,1020,51.9
 2001,Vancouver,In core housing need,Owner,Chinese,12190,23340,926,49.9
 2001,Vancouver,In core housing need,Owner,South Asian,3020,28760,1340,57.3
@@ -74,7 +74,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2001,Vancouver,In core housing need,Owner,Visible minority not included elsewhere,25,28000,1600,66
 2001,Vancouver,In core housing need,Owner,Multiple visible minorities,180,25200,920,45.4
 2001,Vancouver,In core housing need,Owner,Not a visible minority,21190,20240,798,48.1
-2001,Vancouver,Household in core housing need7,Renter,All households,82455,18700,698,49.1
+2001,Vancouver,In core housing need,Renter,All households,82455,18700,698,49.1
 2001,Vancouver,In core housing need,Renter,Visible minority total,24505,20840,732,47
 2001,Vancouver,In core housing need,Renter,Chinese,7885,20080,740,47.8
 2001,Vancouver,In core housing need,Renter,South Asian,4450,22160,666,42.4
@@ -179,7 +179,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2006,Vancouver,Total,Renter,Visible minority not included elsewhere,555,49000,840,30.4
 2006,Vancouver,Total,Renter,Multiple visible minorities,1685,48600,798,28.7
 2006,Vancouver,Total,Renter,Not a visible minority,182225,50440,904,30.2
-2006,Vancouver,Household in core housing need7,Total,All households,129145,22260,882,50.1
+2006,Vancouver,In core housing need,Total,All households,129145,22260,882,50.1
 2006,Vancouver,In core housing need,Total,Visible minority total,53125,24540,970,49.9
 2006,Vancouver,In core housing need,Total,Chinese,25960,23780,923,49
 2006,Vancouver,In core housing need,Total,South Asian,7835,27280,1082,49.2
@@ -194,7 +194,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2006,Vancouver,In core housing need,Total,Visible minority not included elsewhere,280,24400,960,51.2
 2006,Vancouver,In core housing need,Total,Multiple visible minorities,890,24080,974,52.4
 2006,Vancouver,In core housing need,Total,Not a visible minority,76020,20660,821,50.2
-2006,Vancouver,Household in core housing need7,Owner,All households,49780,24620,1051,52.4
+2006,Vancouver,In core housing need,Owner,All households,49780,24620,1051,52.4
 2006,Vancouver,In core housing need,Owner,Visible minority total,26690,26240,1135,53.2
 2006,Vancouver,In core housing need,Owner,Chinese,16055,24680,990,50
 2006,Vancouver,In core housing need,Owner,South Asian,3900,31080,1470,57.6
@@ -209,7 +209,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2006,Vancouver,In core housing need,Owner,Visible minority not included elsewhere,75,30000,1360,56
 2006,Vancouver,In core housing need,Owner,Multiple visible minorities,375,28400,1305,57.8
 2006,Vancouver,In core housing need,Owner,Not a visible minority,23090,22760,954,51.4
-2006,Vancouver,Household in core housing need7,Renter,All households,79365,20780,775,48.6
+2006,Vancouver,In core housing need,Renter,All households,79365,20780,775,48.6
 2006,Vancouver,In core housing need,Renter,Visible minority total,26430,22820,802,46.6
 2006,Vancouver,In core housing need,Renter,Chinese,9905,22360,813,47.3
 2006,Vancouver,In core housing need,Renter,South Asian,3940,23560,693,40.8
@@ -314,7 +314,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2011,Vancouver,Total,Renter,Visible minority not included elsewhere,560,61200,1000,28.4
 2011,Vancouver,Total,Renter,Multiple visible minorities,1995,58350,1049,29.1
 2011,Vancouver,Total,Renter,Not a visible minority,183790,60300,1070,30.5
-2011,Vancouver,Household in core housing need7,Total,All households,144720,26240,1039,50.2
+2011,Vancouver,In core housing need,Total,All households,144720,26240,1039,50.2
 2011,Vancouver,In core housing need,Total,Visible minority total,61645,28880,1128,49.8
 2011,Vancouver,In core housing need,Total,Chinese,27040,27520,1098,50.5
 2011,Vancouver,In core housing need,Total,South Asian,10475,31920,1201,47.9
@@ -329,7 +329,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2011,Vancouver,In core housing need,Total,Visible minority not included elsewhere,260,27600,970,47.4
 2011,Vancouver,In core housing need,Total,Multiple visible minorities,1120,30050,1152,48.2
 2011,Vancouver,In core housing need,Total,Not a visible minority,83075,24260,973,50.5
-2011,Vancouver,Household in core housing need7,Owner,All households,59025,28600,1208,52.1
+2011,Vancouver,In core housing need,Owner,All households,59025,28600,1208,52.1
 2011,Vancouver,In core housing need,Owner,Visible minority total,31300,30360,1296,53
 2011,Vancouver,In core housing need,Owner,Chinese,17835,28360,1172,51.6
 2011,Vancouver,In core housing need,Owner,South Asian,5180,35920,1552,53.5
@@ -344,7 +344,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2011,Vancouver,In core housing need,Owner,Visible minority not included elsewhere,75,27000,1200,58
 2011,Vancouver,In core housing need,Owner,Multiple visible minorities,530,33400,1350,50.2
 2011,Vancouver,In core housing need,Owner,Not a visible minority,27730,26560,1110,51.1
-2011,Vancouver,Household in core housing need7,Renter,All households,85695,24600,921,48.9
+2011,Vancouver,In core housing need,Renter,All households,85695,24600,921,48.9
 2011,Vancouver,In core housing need,Renter,Visible minority total,30350,27320,953,46.4
 2011,Vancouver,In core housing need,Renter,Chinese,9200,25880,954,48.3
 2011,Vancouver,In core housing need,Renter,South Asian,5290,28040,851,42.3
@@ -449,7 +449,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2016,Vancouver,Total,Renter,Visible minority not included elsewhere,1080,58100,1126,30.8
 2016,Vancouver,Total,Renter,Multiple visible minorities,2925,69700,1223,29
 2016,Vancouver,Total,Renter,Not a visible minority,207445,71000,1245,29.8
-2016,Vancouver,Household in core housing need7,Total,All households,156810,29760,1168,49.9
+2016,Vancouver,In core housing need,Total,All households,156810,29760,1168,49.9
 2016,Vancouver,In core housing need,Total,Visible minority total,73260,32960,1294,50
 2016,Vancouver,In core housing need,Total,Chinese,31715,31360,1298,52
 2016,Vancouver,In core housing need,Total,South Asian,12035,37480,1406,47.4
@@ -464,7 +464,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2016,Vancouver,In core housing need,Total,Visible minority not included elsewhere,480,31100,1040,45.1
 2016,Vancouver,In core housing need,Total,Multiple visible minorities,1515,33760,1298,48.8
 2016,Vancouver,In core housing need,Total,Not a visible minority,83550,27000,1057,49.8
-2016,Vancouver,Household in core housing need7,Owner,All households,60985,32800,1370,51.8
+2016,Vancouver,In core housing need,Owner,All households,60985,32800,1370,51.8
 2016,Vancouver,In core housing need,Owner,Visible minority total,37515,35040,1498,53.2
 2016,Vancouver,In core housing need,Owner,Chinese,22320,32520,1390,53.3
 2016,Vancouver,In core housing need,Owner,South Asian,6165,42720,1830,53
@@ -479,7 +479,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2016,Vancouver,In core housing need,Owner,Visible minority not included elsewhere,70,33000,1160,47
 2016,Vancouver,In core housing need,Owner,Multiple visible minorities,645,38200,1584,51.5
 2016,Vancouver,In core housing need,Owner,Not a visible minority,23470,29280,1164,49.4
-2016,Vancouver,Household in core housing need7,Renter,All households,95825,27840,1040,48.7
+2016,Vancouver,In core housing need,Renter,All households,95825,27840,1040,48.7
 2016,Vancouver,In core housing need,Renter,Visible minority total,35740,30760,1082,46.6
 2016,Vancouver,In core housing need,Renter,Chinese,9390,28520,1084,48.8
 2016,Vancouver,In core housing need,Renter,South Asian,5870,31960,958,41.5
@@ -584,7 +584,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2021,Vancouver,Total,Renter,Visible minority not included elsewhere,2375,72600,1402,29.6
 2021,Vancouver,Total,Renter,Multiple visible minorities,5010,89000,1572,27.6
 2021,Vancouver,Total,Renter,Not a visible minority,211580,90200,1608,28.5
-2021,Vancouver,Household in core housing need7,Total,All households,166100,40120,1522,48
+2021,Vancouver,In core housing need,Total,All households,166100,40120,1522,48
 2021,Vancouver,In core housing need,Total,Visible minority total,84740,42920,1656,48.8
 2021,Vancouver,In core housing need,Total,South Asian,13020,47080,1738,47.1
 2021,Vancouver,In core housing need,Total,Chinese,35830,40440,1672,51.2
@@ -599,7 +599,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2021,Vancouver,In core housing need,Total,Visible minority not included elsewhere,1185,40900,1460,45.8
 2021,Vancouver,In core housing need,Total,Multiple visible minorities,2070,42040,1594,47.8
 2021,Vancouver,In core housing need,Total,Not a visible minority,81355,37160,1384,47.2
-2021,Vancouver,Household in core housing need7,Owner,All households,66940,41360,1652,49.3
+2021,Vancouver,In core housing need,Owner,All households,66940,41360,1652,49.3
 2021,Vancouver,In core housing need,Owner,Visible minority total,41665,43640,1810,51.3
 2021,Vancouver,In core housing need,Owner,South Asian,5570,50960,2190,53.1
 2021,Vancouver,In core housing need,Owner,Chinese,25560,41240,1722,51.5
@@ -614,7 +614,7 @@ year,geography,core_housing_need_status,tenure,visible_minority_status,household
 2021,Vancouver,In core housing need,Owner,Visible minority not included elsewhere,330,42200,1670,49.2
 2021,Vancouver,In core housing need,Owner,Multiple visible minorities,825,44100,1780,49.6
 2021,Vancouver,In core housing need,Owner,Not a visible minority,25275,37640,1390,46.1
-2021,Vancouver,Household in core housing need7,Renter,All households,99160,39240,1436,47.2
+2021,Vancouver,In core housing need,Renter,All households,99160,39240,1436,47.2
 2021,Vancouver,In core housing need,Renter,Visible minority total,43075,42280,1506,46.4
 2021,Vancouver,In core housing need,Renter,South Asian,7445,44160,1400,42.6
 2021,Vancouver,In core housing need,Renter,Chinese,10265,38480,1546,50.6
