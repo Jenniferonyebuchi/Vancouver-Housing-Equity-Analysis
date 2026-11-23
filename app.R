@@ -10,7 +10,7 @@ df <- read_csv("data/vancouver_housing_tidy.csv", show_col_types = FALSE)
 
 reference_years <- c(2001, 2006, 2011, 2016, 2021)
 
-reference_count <- function(target_year, target_group, target_status = "Total", target_tenure = "Total") {
+reference_record <- function(target_year, target_group, target_status = "Total", target_tenure = "Total") {
   record <- df %>%
     filter(
       .data$year == .env$target_year,
@@ -21,12 +21,46 @@ reference_count <- function(target_year, target_group, target_status = "Total", 
 
   if (nrow(record) != 1) {
     stop(
-      paste("Expected one household-count record for", target_group, target_year, target_status, target_tenure),
+      paste("Expected one reference record for", target_group, target_year, target_status, target_tenure),
       call. = FALSE
     )
   }
 
-  record$household_count[[1]]
+  record
+}
+
+reference_value <- function(
+  target_year,
+  target_group,
+  target_status = "Total",
+  target_tenure = "Total",
+  field = "household_count"
+) {
+  record <- reference_record(target_year, target_group, target_status, target_tenure)
+  value <- record[[field]][[1]]
+
+  if (is.na(value)) {
+    stop(
+      paste("Missing", field, "for", target_group, target_year, target_status, target_tenure),
+      call. = FALSE
+    )
+  }
+
+  as.numeric(value)
+}
+
+reference_count <- function(target_year, target_group, target_status = "Total", target_tenure = "Total") {
+  reference_value(target_year, target_group, target_status, target_tenure)
+}
+
+reference_series <- function(group, status = "Total", tenure = "Total", field = "household_count") {
+  vapply(reference_years, function(year) {
+    reference_value(year, group, status, tenure, field)
+  }, numeric(1))
+}
+
+format_percentage <- function(value) {
+  paste0(formatC(value, format = "f", digits = 1), "%")
 }
 
 core_need_share <- function(group) {
@@ -41,14 +75,59 @@ core_need_share <- function(group) {
 
 black_core_need_share <- core_need_share("Black")
 chinese_core_need_share <- core_need_share("Chinese")
+black_not_need_share <- 100 * reference_series("Black", "Not in core housing need") /
+  reference_series("Black")
+chinese_not_need_share <- 100 * reference_series("Chinese", "Not in core housing need") /
+  reference_series("Chinese")
 black_previous_change <- c(NA_real_, diff(black_core_need_share))
 chinese_previous_change <- c(NA_real_, diff(chinese_core_need_share))
 black_change_since_2001 <- c(NA_real_, black_core_need_share[-1] - black_core_need_share[1])
 chinese_change_since_2001 <- c(NA_real_, chinese_core_need_share[-1] - chinese_core_need_share[1])
 
-format_percentage <- function(value) {
-  paste0(formatC(value, format = "f", digits = 1), "%")
+table5_display <- data.frame(
+  Year = reference_years,
+  `Black in core housing need (%)` = format_percentage(black_core_need_share),
+  `Chinese in core housing need (%)` = format_percentage(chinese_core_need_share),
+  `Black not in core housing need (%)` = format_percentage(black_not_need_share),
+  `Chinese not in core housing need (%)` = format_percentage(chinese_not_need_share),
+  check.names = FALSE
+)
+
+format_count <- function(value) {
+  formatC(value, format = "f", digits = 0, big.mark = ",")
 }
+
+format_currency <- function(value) {
+  paste0("$", formatC(value, format = "f", digits = 0, big.mark = ","))
+}
+
+reference_categories <- list(
+  "Total households" = list(status = "Total", tenure = "Total"),
+  "Owner households" = list(status = "Total", tenure = "Owner"),
+  "Renter households" = list(status = "Total", tenure = "Renter"),
+  "In core housing need" = list(status = "In core housing need", tenure = "Total"),
+  "Not in core housing need" = list(status = "Not in core housing need", tenure = "Total")
+)
+
+build_reference_table <- function(field, formatter) {
+  table <- data.frame(Year = reference_years)
+
+  for (category in names(reference_categories)) {
+    for (group in c("Black", "Chinese")) {
+      selection <- reference_categories[[category]]
+      table[[paste(category, group, sep = " - ")]] <- formatter(
+        reference_series(group, selection$status, selection$tenure, field)
+      )
+    }
+  }
+
+  table
+}
+
+table1_display <- build_reference_table("household_count", format_count)
+table2_display <- build_reference_table("avg_household_income", format_currency)
+table3_display <- build_reference_table("avg_monthly_shelter_cost", format_currency)
+table4_display <- build_reference_table("avg_stir_pct", format_percentage)
 
 format_percentage_point_change <- function(value) {
   if (is.na(value)) {
@@ -408,8 +487,74 @@ ui <- fluidPage(
         class = "guide-content",
         h2(class = "guide-heading", "Reference tables"),
         p(
-          "These tables provide the Black and Chinese household figures behind the dashboard comparisons. Percentages and percentage-point changes are calculated from the household counts in the project data and displayed to one decimal place.",
+          "These seven tables show Black and Chinese household counts and housing measures from 2001 to 2021. Tables 1–4 show the source counts and averages; Tables 5–7 show shares and changes calculated from the counts. Percentages and percentage-point changes are displayed to one decimal place.",
           class = "guide-lead"
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 1. Household count"),
+          div(
+            class = "table-responsive",
+            tableOutput("table1")
+          ),
+          p(
+            "Table 1 counts households, not individual people. In 2021, the table includes 13,975 Black households and 175,355 Chinese households. The other columns break the counts down by tenure and core-housing-need status."
+          ),
+          div(
+            class = "guide-callout",
+            p("Owner and renter counts may not add exactly to the total because the published counts are rounded. For example, in 2001 there were 2,245 Black owner households and 3,765 renter households (6,010 combined), compared with 6,015 total Black households.")
+          )
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 2. Average household income ($)"),
+          div(
+            class = "table-responsive",
+            tableOutput("table2")
+          ),
+          p(
+            "This table shows average household income for each group, tenure, and core-housing-need category. In 2021, the total-tenure averages were $96,500 for Black households and $111,700 for Chinese households. Among households in core housing need, the averages were $43,640 and $40,440; among those not in need, they were $113,200 and $130,000."
+          ),
+          p("These are group averages, not the income of every household.")
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 3. Average monthly shelter cost ($)"),
+          div(
+            class = "table-responsive",
+            tableOutput("table3")
+          ),
+          p(
+            "This table shows the average monthly shelter cost for each group and category. In 2021, total-tenure averages were $1,694 for Black households and $1,776 for Chinese households. For households in core housing need, the averages were $1,470 and $1,672; for those not in need, they were $1,764 and $1,804."
+          ),
+          p("Shelter cost by itself does not show how affordable housing is for a household; income also matters.")
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 4. Average shelter-cost-to-income ratio (STIR, %)"),
+          div(
+            class = "table-responsive",
+            tableOutput("table4")
+          ),
+          p(
+            "STIR expresses shelter cost in relation to household income. A higher percentage means shelter costs take up a larger share of income on average. In 2021, the average STIR for households in core housing need was 43.9% for Black households and 51.2% for Chinese households; for households not in need, it was 21.3% and 19.9%."
+          ),
+          p("These are averages for groups; they do not describe every household’s costs or income.")
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 5. Share in and not in core housing need"),
+          div(
+            class = "table-responsive",
+            tableOutput("table5")
+          ),
+          p(
+            "Each percentage is calculated within that group’s total households; it is not the group’s share of all Vancouver households. In 2021, 24.0% of Black households and 20.4% of Chinese households were in core housing need. The corresponding not-in-need shares were 76.0% and 79.6%."
+          ),
+          div(
+            class = "guide-callout",
+            p("The published counts are rounded, so the in-need and not-in-need shares may not add to exactly 100%. For example, among Black households in 2006, 26.8% + 73.1% = 99.9%.")
+          )
         ),
         div(
           class = "guide-section",
@@ -426,7 +571,7 @@ ui <- fluidPage(
           ),
           div(
             class = "guide-callout",
-            p("The source workbook’s separate in-need and not-in-need shares may not add to exactly 100.0% because the published counts are rounded. For example, among Black households in 2006, 26.8% + 73.1% = 99.9%.")
+            p("Changes are calculated from the underlying shares before rounding them for display. As a result, a displayed change may differ slightly from subtracting the one-decimal percentages in the table.")
           ),
           div(
             class = "plot-card",
@@ -752,6 +897,26 @@ server <- function(input, output, session) {
       )
     )
   })
+
+  output$table1 <- renderTable({
+    table1_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$table2 <- renderTable({
+    table2_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$table3 <- renderTable({
+    table3_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$table4 <- renderTable({
+    table4_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$table5 <- renderTable({
+    table5_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
 
   output$table6 <- renderTable({
     table6_display
