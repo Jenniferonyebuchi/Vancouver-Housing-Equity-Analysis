@@ -39,6 +39,7 @@ ui <- fluidPage(
       .project-kicker { color: #b9e8e4; font-size: 12px; font-weight: 700; letter-spacing: .12em; margin-bottom: 12px; text-transform: uppercase; }
       .project-hero h1 { font-size: clamp(30px, 4.2vw, 48px); font-weight: 700; line-height: 1.08; margin: 0 0 16px; }
       .project-hero p { color: #e7f0f7; font-size: 17px; line-height: 1.65; margin: 0; max-width: 850px; }
+      .project-hero p + p { margin-top: 12px; }
       .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
       .project-tag { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.24); border-radius: 999px; color: #fff; font-size: 12px; padding: 7px 11px; }
       .well { background: #fff; border: 1px solid #dce5ee; border-radius: 16px; box-shadow: 0 8px 24px rgba(16, 42, 67, .05); padding: 22px; }
@@ -95,6 +96,12 @@ ui <- fluidPage(
     class = "project-hero",
     div(class = "project-kicker", "Vancouver housing | 2001-2021"),
     h1("Vancouver Housing Equity Dashboard"),
+    p(
+      "Vancouver has long faced intense pressure on housing affordability, and the data used in this project suggests that these pressures are not distributed evenly across communities. The dashboard is designed to make visible who is carrying the heaviest burden in terms of shelter costs, household income, and core housing need."
+    ),
+    p(
+      "The goal is not to reduce a complex issue to a single story, but to show where the data points suggest structural inequities in the housing market. In particular, the findings are consistent with the view that Black households in Vancouver experience significant marginalization within the housing system."
+    ),
     p(
       "Explore how household income, monthly shelter costs, and shelter-cost-to-income ratios vary across visible-minority groups and core housing need status in Vancouver over time. This dashboard supports descriptive comparison; it does not establish the causes of observed differences."
     ),
@@ -169,7 +176,7 @@ ui <- fluidPage(
         class = "guide-content",
         h2(class = "guide-heading", "About this project"),
         p(
-          "A guide to the research question, source data, measures, and how to interpret the dashboard.",
+          "This project examines how housing affordability and core housing need vary across visible minority groups in Vancouver, with a specific focus on how Black households compare with other groups across time. The work is built around a Shiny dashboard that makes the story accessible to a broad audience through clear visuals and interactive comparisons.",
           class = "guide-lead"
         ),
         div(
