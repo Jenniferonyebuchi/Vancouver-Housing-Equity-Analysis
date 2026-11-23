@@ -8,6 +8,101 @@ prepare_vancouver_housing_data()
 
 df <- read_csv("data/vancouver_housing_tidy.csv", show_col_types = FALSE)
 
+reference_years <- c(2001, 2006, 2011, 2016, 2021)
+
+reference_count <- function(target_year, target_group, target_status = "Total", target_tenure = "Total") {
+  record <- df %>%
+    filter(
+      .data$year == .env$target_year,
+      .data$visible_minority_status == .env$target_group,
+      .data$core_housing_need_status == .env$target_status,
+      .data$tenure == .env$target_tenure
+    )
+
+  if (nrow(record) != 1) {
+    stop(
+      paste("Expected one household-count record for", target_group, target_year, target_status, target_tenure),
+      call. = FALSE
+    )
+  }
+
+  record$household_count[[1]]
+}
+
+core_need_share <- function(group) {
+  vapply(reference_years, function(year) {
+    total <- reference_count(year, group)
+    if (total <= 0) {
+      stop("Total household counts must be greater than zero.", call. = FALSE)
+    }
+    100 * reference_count(year, group, "In core housing need") / total
+  }, numeric(1))
+}
+
+black_core_need_share <- core_need_share("Black")
+chinese_core_need_share <- core_need_share("Chinese")
+black_previous_change <- c(NA_real_, diff(black_core_need_share))
+chinese_previous_change <- c(NA_real_, diff(chinese_core_need_share))
+black_change_since_2001 <- c(NA_real_, black_core_need_share[-1] - black_core_need_share[1])
+chinese_change_since_2001 <- c(NA_real_, chinese_core_need_share[-1] - chinese_core_need_share[1])
+
+format_percentage <- function(value) {
+  paste0(formatC(value, format = "f", digits = 1), "%")
+}
+
+format_percentage_point_change <- function(value) {
+  if (is.na(value)) {
+    return("n/a")
+  }
+  paste0(if (value > 0) "+" else "", formatC(value, format = "f", digits = 1))
+}
+
+format_percentage_point_changes <- function(values) {
+  vapply(values, format_percentage_point_change, character(1))
+}
+
+table6_display <- data.frame(
+  Year = reference_years,
+  `Black share in need (%)` = format_percentage(black_core_need_share),
+  `Chinese share in need (%)` = format_percentage(chinese_core_need_share),
+  `Black change vs previous census (pp)` = format_percentage_point_changes(black_previous_change),
+  `Chinese change vs previous census (pp)` = format_percentage_point_changes(chinese_previous_change),
+  `Black change since 2001 (pp)` = format_percentage_point_changes(black_change_since_2001),
+  `Chinese change since 2001 (pp)` = format_percentage_point_changes(chinese_change_since_2001),
+  check.names = FALSE
+)
+
+table7_share <- function(group, tenure) {
+  vapply(reference_years, function(year) {
+    total <- reference_count(year, group)
+    if (total <= 0) {
+      stop("Total household counts must be greater than zero.", call. = FALSE)
+    }
+    100 * reference_count(year, group, target_tenure = tenure) / total
+  }, numeric(1))
+}
+
+black_owner_share <- table7_share("Black", "Owner")
+chinese_owner_share <- table7_share("Chinese", "Owner")
+black_renter_share <- table7_share("Black", "Renter")
+chinese_renter_share <- table7_share("Chinese", "Renter")
+
+table7_display <- data.frame(
+  Year = reference_years,
+  `Black owners (%)` = format_percentage(black_owner_share),
+  `Chinese owners (%)` = format_percentage(chinese_owner_share),
+  `Black renters (%)` = format_percentage(black_renter_share),
+  `Chinese renters (%)` = format_percentage(chinese_renter_share),
+  check.names = FALSE
+)
+
+core_need_trend <- data.frame(
+  year = rep(reference_years, times = 2),
+  group = rep(c("Black", "Chinese"), each = length(reference_years)),
+  share = c(black_core_need_share, chinese_core_need_share)
+) %>%
+  mutate(tooltip = paste0(group, "<br>", year, ": ", format_percentage(share)))
+
 all_groups <- c(
   "Black",
   "South Asian",
@@ -78,6 +173,11 @@ ui <- fluidPage(
       .guide-card h3 { margin-top: 0; }
       .guide-list { margin-bottom: 0; padding-left: 20px; }
       .guide-list li + li { margin-top: 7px; }
+      .table-responsive { border: 0; margin-bottom: 12px; }
+      .table-responsive .table { background: #fff; margin: 0; width: 100%; }
+      .table-responsive .table th { background: #edf3f8; color: #173451; white-space: normal; }
+      .table-responsive .table td { white-space: nowrap; }
+      #coreNeedTrendPlot { min-height: 340px; }
       .guide-callout { background: #eef7f6; border-left: 4px solid #2a9d8f; border-radius: 8px; color: #35566a; line-height: 1.6; margin-top: 14px; padding: 13px 16px; }
       .guide-callout p { margin: 0; }
       .footer-note { color: #66788a; font-size: 12px; margin-top: 18px; text-align: center; }
@@ -244,7 +344,7 @@ ui <- fluidPage(
             div(
               class = "guide-card",
               h3("Core housing need"),
-              p("The workbook defines a household as being in core housing need when its housing fails at least one of the adequacy, suitability, or affordability standards and it cannot afford an alternative acceptable unit in its local market. The affordability test uses a threshold of 30% or more of before-tax household income for the median rent of that alternative. The workbook notes an exception for non-family households with a maintainer aged 15 to 29 who is attending school.")
+              p("CMHC defines a household as being in core housing need when its housing fails at least one of the adequacy, suitability, or affordability standards and it cannot afford an alternative acceptable unit in its local market. The affordability test uses a threshold of 30% or more of before-tax household income for the median rent of that alternative. The workbook notes an exception for non-family households with a maintainer aged 15 to 29 who is attending school.")
             ),
             div(
               class = "guide-card",
@@ -259,7 +359,7 @@ ui <- fluidPage(
             div(
               class = "guide-card",
               h3("Shelter costs and tenure"),
-              p("The workbook describes shelter cost as average monthly household shelter expenses, including relevant housing payments and utilities. Tenure distinguishes owner, renter, and total households; the workbook notes that tenure is based on whether any household member owns the dwelling or the household rents it.")
+              p("CMHC describes shelter cost as average monthly household shelter expenses, including relevant housing payments and utilities. Tenure distinguishes owner, renter, and total households; the workbook notes that tenure is based on whether any household member owns the dwelling or the household rents it.")
             )
           ),
           div(
@@ -298,6 +398,60 @@ ui <- fluidPage(
           class = "guide-section",
           h2("Author and technical contribution"),
           p(strong("Project author: "), "Jennifer Ezinne Onyebuchi.")
+        )
+      )
+    ),
+    tabPanel(
+      title = "Reference tables",
+      value = "tables",
+      div(
+        class = "guide-content",
+        h2(class = "guide-heading", "Reference tables"),
+        p(
+          "These tables provide the Black and Chinese household figures behind the dashboard comparisons. Percentages and percentage-point changes are calculated from the household counts in the project data and displayed to one decimal place.",
+          class = "guide-lead"
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 6. Change over time in the share in core housing need"),
+          div(
+            class = "table-responsive",
+            tableOutput("table6")
+          ),
+          p(
+            "Table 6 shows the share of each group’s households that were in core housing need. “Change vs previous census” compares each year with the census before it; “change since 2001” compares it with 2001. A percentage-point change is the difference between two percentages."
+          ),
+          p(
+            "For Black households, the share rose from 24.9% in 2001 to 27.9% in 2016, then fell by 3.9 percentage points to 24.0% in 2021—0.9 points below 2001. For Chinese households, it rose to 24.0% in 2006 and then declined to 20.4% in 2021, 1.8 points below 2001. The Black share was higher than the Chinese share in all five census years."
+          ),
+          div(
+            class = "guide-callout",
+            p("The source workbook’s separate in-need and not-in-need shares may not add to exactly 100.0% because the published counts are rounded. For example, among Black households in 2006, 26.8% + 73.1% = 99.9%.")
+          ),
+          div(
+            class = "plot-card",
+            div(
+              class = "chart-heading",
+              h3("Trend in core housing need"),
+              p("The line chart shows the share of households in core housing need for each group and census year.")
+            ),
+            plotlyOutput("coreNeedTrendPlot", height = "360px")
+          )
+        ),
+        div(
+          class = "guide-section",
+          h2("Table 7. Share of each group that owns vs rents"),
+          div(
+            class = "table-responsive",
+            tableOutput("table7")
+          ),
+          p(
+            "Black households were mostly renters in every year. The owner share peaked at 42.8% in 2011, then fell to 31.2% by 2021. Among Chinese households, about four in five were owners; the owner share increased from 77.5% in 2001 to 81.7% in 2021, reaching 82.0% in 2016."
+          ),
+          div(
+            class = "guide-callout",
+            p("Owner and renter percentages may add up to slightly more or less than 100% because the published counts are rounded. For example, for Black households in 2011, 42.8% + 57.3% = 100.1%.")
+          )
         )
       )
     )
@@ -597,6 +751,53 @@ server <- function(input, output, session) {
         )
       )
     )
+  })
+
+  output$table6 <- renderTable({
+    table6_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$table7 <- renderTable({
+    table7_display
+  }, rownames = FALSE, striped = TRUE, hover = TRUE)
+
+  output$coreNeedTrendPlot <- renderPlotly({
+    plot_ly(
+      data = core_need_trend,
+      x = ~year,
+      y = ~share,
+      type = "scatter",
+      mode = "lines+markers",
+      color = ~group,
+      colors = c("#2E86DE", "#2A9D8F"),
+      text = ~tooltip,
+      hoverinfo = "text",
+      line = list(width = 3),
+      marker = list(size = 8)
+    ) %>%
+      layout(
+        xaxis = list(
+          title = "Census year",
+          tickmode = "array",
+          tickvals = reference_years,
+          gridcolor = "#dfe7f1"
+        ),
+        yaxis = list(
+          title = "Households in core housing need (%)",
+          range = c(0, 35),
+          ticksuffix = "%",
+          gridcolor = "#dfe7f1"
+        ),
+        legend = list(
+          title = list(text = "Household group"),
+          orientation = "h",
+          x = 0,
+          y = 1.12
+        ),
+        paper_bgcolor = "#fff",
+        plot_bgcolor = "#fff",
+        margin = list(b = 55, l = 65, r = 20, t = 35)
+      )
   })
 }
 
