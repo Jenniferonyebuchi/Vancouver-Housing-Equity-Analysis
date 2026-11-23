@@ -283,18 +283,6 @@ ui <- fluidPage(
         ),
         div(
           class = "guide-section",
-          h2("Data preparation and analytical method"),
-          tags$ol(
-            class = "guide-list",
-            tags$li("Read the five year sheets from the packaged workbook."),
-            tags$li("Keep rows whose geography label begins with Vancouver, standardize category labels, and convert the source measure columns to numeric values."),
-            tags$li("Write the cleaned records to the tidy CSV used by the app."),
-            tags$li("Filter the CSV by the selected year, group, and tenure; exclude the Total core-housing-need status from the plot; and display the source-provided averages as grouped bars for the two need statuses.")
-          ),
-          p("The dashboard displays the source-provided averages. The key-findings section calculates one household-count share and differences between reported averages for description; it does not calculate new averages or causal estimates.")
-        ),
-        div(
-          class = "guide-section",
           h2("Limitations and considerations"),
           tags$ul(
             class = "guide-list",
@@ -309,11 +297,7 @@ ui <- fluidPage(
         div(
           class = "guide-section",
           h2("Author and technical contribution"),
-          p(strong("Project author: "), "Jennifer Ezinne Onyebuchi."),
-          p(
-            strong("Technical contribution: "),
-            "The data-preparation script cleans and standardizes the workbook records into the tidy CSV. The Shiny application provides the group, year, metric, and tenure controls and renders the interactive Plotly comparison."
-          )
+          p(strong("Project author: "), "Jennifer Ezinne Onyebuchi.")
         )
       )
     )
